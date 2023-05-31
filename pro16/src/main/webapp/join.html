@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원 가입창</title>
+<body>
+	<form>
+		<h1 style="text-align: center">회원 가입창</h1>
+		<table align="center">
+			<tr>
+				<td width="200"><p align="right">아이디</td>
+				<td width="400"><input type="text" name="id" id="id">
+					<button type="button" id="chkUserID" onClick="check_id()">ID
+						중복체크</button>
+					<div id="message"></div></td>
+			</tr>
+			<tr>
+				<td width="200"><p align="right">비밀번호</td>
+				<td width="400"><input type="password" name="pwd"></td>
+			</tr>
+			<tr>
+				<td width="200"><p align="right">이름</td>
+				<td width="400"><p>
+						<input type="text" name="name"></td>
+			</tr>
+			<tr>
+				<td width="200"><p align="right">이메일</td>
+				<td width="400"><p>
+						<input type="text" name="email"></td>
+			</tr>
+			<tr>
+				<td width="200"><p>&nbsp;</p></td>
+				<td width="400"><input type="submit" value="가입하기"> <input
+					type="reset" value="다시입력"></td>
+			</tr>
+		</table>
+	</form>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script>
+		function check_id() {
+			let user_id = $("#id").val();
+
+			if (user_id == "") {
+				alert("ID를 입려하세요");
+				return;
+			}
+
+			$.ajax({
+				type : "POST",
+				async : true,
+				url : "/pro16/mem",
+				dataType : "text", // 받을 데이터 형태
+				data : "id=" + user_id, // 전송할 데이터 (id라는 변수로 전달)
+
+				success : function(data, textStatus) {
+					if (data.trim() == "usable")
+						$("#message").text("사용할 수 있는 ID입니다.");
+					else
+						$("#message").text("사용할 수 없는 ID입니다.");
+				},
+
+				error : function(data, textStatus) {
+					alert("오류가 발생했습니다.");
+				},
+
+				complete : function(data, textStatus) {
+					// 비동기 통신이 다 완료됐을 때 필요에 따라서 코딩하는 부분
+				}
+			}); // end of ajax
+		}
+	</script>
+</body>
+</html>
